@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: pattaratos/test-pizza:latest
+          image: pattaratos/arainea-database:latest
           env:
             - name: POSTGRES_USER
               value: "pizzauser"
