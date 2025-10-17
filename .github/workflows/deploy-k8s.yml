@@ -1,0 +1,42 @@
+name: Deploy to Kubernetes
+
+on:
+  workflow_call:
+    inputs:
+      source_repo:
+        required: true
+        type: string
+  workflow_dispatch:
+
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Setup Minikube (ถ้าทดสอบ local)
+        uses: medyagh/setup-minikube@latest
+
+      - name: Apply manifests
+        run: |
+          # ✅ apply namespace ก่อน
+          kubectl apply -f k8s/namespace.yaml
+
+          # ✅ รอให้ namespace สร้างเสร็จ (กันเคส timing)
+          sleep 3
+
+          # ✅ apply ส่วนอื่นทั้งหมด
+          kubectl apply -f k8s/
+
+          echo "✅ Current Pods:"
+          kubectl get pods -n arainea
+      

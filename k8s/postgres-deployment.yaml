@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arainea-db
+  namespace: arainea
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arainea-db
+  template:
+    metadata:
+      labels:
+        app: arainea-db
+    spec:
+      containers:
+        - name: postgres
+          image: pattaratos/test-pizza:latest
+          env:
+            - name: POSTGRES_USER
+              value: "pizzauser"
+            - name: POSTGRES_PASSWORD
+              value: "pizzapass"
+            - name: POSTGRES_DB
+              value: "pizza"
+          ports:
+            - containerPort: 5432
+          # ❗ ใช้ emptyDir เพื่อให้ล้างข้อมูลเมื่อ pod รีสตาร์ท
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: db-data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: arainea-db
+  namespace: arainea
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: arainea-db
