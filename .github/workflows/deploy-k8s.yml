@@ -6,7 +6,6 @@ on:
       source_repo:
         required: true
         type: string
-  workflow_dispatch:
 
 
 defaults:
