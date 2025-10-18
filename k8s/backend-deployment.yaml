@@ -30,7 +30,8 @@ spec:
               mountPath: /app/Images
       volumes:
         - name: images-volume
-          emptyDir: {}   # reset เมื่อ pod ใหม่
+          persistentVolumeClaim:
+            claimName: images-pvc   # reset เมื่อ pod ใหม่
 ---
 apiVersion: v1
 kind: Service
