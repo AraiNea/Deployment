@@ -13,6 +13,13 @@ spec:
       labels:
         app: arainea-backend
     spec:
+      initContainers:
+        - name: copy-images
+          image: pattaratos/arainea-backend:latest
+          command: [ "sh", "-c", "mkdir -p /Images && cp -r /app/Images/* /Images/ || true" ]
+          volumeMounts:
+            - name: images-volume
+              mountPath: /Images
       containers:
         - name: backend
           image: pattaratos/arainea-backend:latest
