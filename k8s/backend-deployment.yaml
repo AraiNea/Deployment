@@ -27,7 +27,7 @@ spec:
             - containerPort: 8080
           volumeMounts:
             - name: images-volume
-              mountPath: /app/Images
+              mountPath: /Images
       volumes:
         - name: images-volume
           persistentVolumeClaim:
