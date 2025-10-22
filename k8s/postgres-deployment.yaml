@@ -25,13 +25,26 @@ spec:
               value: "pizza"
           ports:
             - containerPort: 5432
-          # ❗ ใช้ emptyDir เพื่อให้ล้างข้อมูลเมื่อ pod รีสตาร์ท
           volumeMounts:
             - name: db-data
               mountPath: /var/lib/postgresql/data
       volumes:
         - name: db-data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: arainea-db-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: arainea-db-pvc
+  namespace: arainea
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: hostpath
 ---
 apiVersion: v1
 kind: Service
@@ -44,3 +57,4 @@ spec:
       targetPort: 5432
   selector:
     app: arainea-db
+
