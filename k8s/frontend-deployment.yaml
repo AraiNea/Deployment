@@ -17,7 +17,7 @@ spec:
         - name: frontend
           image: cxgdn/arainea-frontend:latest
           ports:
-            - containerPort: 80   # ถ้า build เป็น nginx (ปกติ)
+            - containerPort: 3000
           env:
             - name: VITE_API_URL
               value: "http://arainea-backend.arainea.svc.cluster.local:8080"
@@ -32,6 +32,6 @@ spec:
   selector:
     app: arainea-frontend
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 3000
+      targetPort: 3000
       nodePort: 30080
